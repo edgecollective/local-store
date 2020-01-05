@@ -3,12 +3,16 @@
 
 <img src="./example.png">
 
+## Usage
+
+```	
 node server.js
 
 visit plotter/index.html
 
-then: python poster.py
+python poster.py
 
+```
 
 ## notes on this version
 

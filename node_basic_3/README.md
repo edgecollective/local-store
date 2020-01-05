@@ -1,6 +1,12 @@
 
 # node_basic_2
 
+node server.js
+
+visit plotter/index.html
+
+then: python poster.py
+
 
 ## notes on this version
 

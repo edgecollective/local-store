@@ -48,7 +48,17 @@ var layout_temp = {
   yaxis: {
     range: [0, 8]
   }, */
-  title:'Temp (C)'
+  title:'Temp (C)',
+  yaxis: {
+    title: {
+      text: 'Temp (C)',
+    }
+  },
+  xaxis: {
+    title: {
+      text: 'index',
+    }
+  }
 };
 
 
@@ -67,8 +77,18 @@ var layout_pressure = {
     range: [0, 8]
   },
   */
-  title:'Pressure (mbar)'
-};
+  title:'Pressure (mbar)',
+  yaxis: {
+    title: {
+      text: 'pressure (mbar)',
+    }
+  },
+  xaxis: {
+    title: {
+      text: 'index',
+    }
+  }
+  };
 
 //console.log(xvals);
 //console.log(temps);

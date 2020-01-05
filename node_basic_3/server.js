@@ -29,6 +29,7 @@ app.listen(HTTP_PORT, () => {
 });
 
 app.get("/api/users", (req, res, next) => {
+    
     var sql = "select * from user"
     var params = []
     db.all(sql, params, (err, rows) => {
@@ -44,7 +45,8 @@ app.get("/api/users", (req, res, next) => {
 });
 
 
-app.get("/api/user/:id", (req, res, next) => {
+app.get("/api/user/id", (req, res, next) => {
+    console.log('id');
     var sql = "select * from user where id = ?"
     var params = [req.params.id]
     db.get(sql, params, (err, row) => {
@@ -58,6 +60,25 @@ app.get("/api/user/:id", (req, res, next) => {
         })
       });
 });
+
+
+app.get("/api/user/latest", (req, res, next) => {
+    console.log('all')
+    //var sql = "select * from user order by timestamp desc LIMIT 10"
+    var sql = "select * from user order by id desc LIMIT 100"
+    var params = []
+    db.all(sql, params, (err, row) => {
+        if (err) {
+          res.status(400).json({"error":err.message});
+          return;
+        }
+        res.json({
+            "message":"success",
+            "data":row
+        })
+      });
+}); 
+
 
 
 app.post("/api/user/", (req, res, next) => {

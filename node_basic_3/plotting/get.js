@@ -3,7 +3,8 @@
 // streaming reference
 var interval = setInterval(function() {
 
-fetch('http://localhost:8000/api/users/')
+//fetch('http://localhost:8000/api/users/')
+fetch('http://localhost:8000/api/user/latest')
   .then((response) => {
     return response.json();
   })
@@ -20,7 +21,8 @@ var xvals = [];
 
 // get the data
 for (i in data) {
-  xvals.push(i);
+  //xvals.push(i);
+  xvals.push(data[i].id);
   timestamp.push(data[i].timestamp);
   current.push(data[i].current);
   voltage.push(data[i].voltage);

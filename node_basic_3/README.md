@@ -1,6 +1,8 @@
 
 # node_basic_2
 
+<img src="./example.png">
+
 node server.js
 
 visit plotter/index.html

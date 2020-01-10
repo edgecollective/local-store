@@ -1,6 +1,10 @@
 
 # node_basic_3
 
+## misc
+
+note: need to install sqlite3 first
+
 <img src="./example.png">
 
 ## Usage

@@ -97,7 +97,8 @@ var layout_resistance = {
   yaxis: {
     title: {
       text: 'Distance (cm)',
-    }
+    },
+    range: [0,200]
   },
   xaxis: {
     title: {

@@ -4,7 +4,9 @@ function connectTheDots(data){
   for(i in data) {
       var x = data[i].latitude;
       var y = data[i].longitude;
+      if (x>0) {
       c.push([x, y]);
+      }
   }
   return c;
 }
@@ -14,7 +16,8 @@ function connectTheDots(data){
 var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
-fetch('http://localhost:8000/api/user/latest')
+//fetch('http://localhost:8000/api/user/latest')
+fetch('http://157.245.241.239:8100/api/user/latest')
   .then((response) => {
     return response.json();
   })
@@ -68,13 +71,13 @@ for (var i = 0; i < xvals.length; i++) {
   var temp = temperature[i];
   var alt = altitude[i];
 
-  
+  if (lat>0) {
   L.circle([lat, lon], 30, {
     color: 'red',
     fillColor: 'green',
     fillOpacity: 0.1
     }).addTo(mymap).bindPopup("Turtle: Bob");
-
+  }
 }
   
 

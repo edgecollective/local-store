@@ -50,6 +50,7 @@ app.get("/api/users", (req, res, next) => {
       });
 });
 
+app.use(express.static('plotting'))
 
 app.get("/api/user/id", (req, res, next) => {
     console.log('id');

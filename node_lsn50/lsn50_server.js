@@ -76,7 +76,7 @@ app.get("/api/user/id", (req, res, next) => {
 app.get("/api/user/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
-    var sql = "select * from user order by id desc LIMIT 100"
+    var sql = "select * from user order by id desc LIMIT 2000"
     var params = []
     db.all(sql, params, (err, row) => {
         if (err) {
@@ -109,9 +109,9 @@ app.post("/api/user/", (req, res, next) => {
 
     console.log(object);
 
-    var tempc= object.TempC;
-    var batv = object.BatV;
-    var adc = object.ADC_CH0V;
+    var tempc= object.temperatureSensor[2];
+    var batv = object.analogInput[3];
+    var adc = object.humiditySensor[1];
 
     console.log(tempc);
     console.log(batv);

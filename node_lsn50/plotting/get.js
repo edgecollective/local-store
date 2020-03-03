@@ -36,7 +36,8 @@ for (i in data) {
 // reference for styles: https://plot.ly/javascript/line-and-scatter/
 
 var temp_trace = {
-  x: xvals, 
+  x: xvals,
+ // x: timestamp,
   y: tempc,
   //mode: 'markers',
   mode: 'lines+markers',
@@ -53,20 +54,67 @@ var batt_trace = {
   //marker: { size: 6, color: 'red'}
 };
 
+var humidity_trace = {
+  x: xvals,
+  y: adc,
+  //mode: 'markers',
+  mode: 'lines+markers',
+  type: 'scatter',
+  //marker: { size: 6, color: 'red'}
+};
+
+var layout_humidity = {
+	title:'Volumetric Water Content (%)',
+	yaxis:{
+		title: {
+			text: 'VWC (%)',
+		},
+		range:[0,100]
+	},
+	xaxis: {
+		title: {
+			text: 'index',
+		}
+	}
+};
 var layout_temp = {
 /*   xaxis: {
-    range: [ 0.75, 5.25 ]
+    range: [ 15, 25 ]
   },
   
   yaxis: {
-    range: [0, 3.3]
+    range: [15, 25]
   }, 
-  */
+*/
   title:'Temperature',
   yaxis: {
     title: {
       text: 'Temp (C)',
+    },
+	  range: [15,32]
+  },
+  xaxis: {
+    title: {
+      text: 'index',
     }
+  }
+};
+
+var layout_voltage = {
+/*   xaxis: {
+    range: [ 15, 25 ]
+  },
+
+  yaxis: {
+    range: [15, 25]
+  },
+*/
+  title:'Battery Voltage',
+  yaxis: {
+    title: {
+      text: 'Voltage (V)',
+    },
+	  range: [3,5]
   },
   xaxis: {
     title: {
@@ -77,13 +125,15 @@ var layout_temp = {
 
 var temp_traces = [temp_trace];
 
-//var resistance_traces = [resistance_trace];
+var voltage_traces = [batt_trace];
 
+var water_traces = [humidity_trace];
 
 Plotly.newPlot('myDiv_a', temp_traces,layout_temp);
 
-//Plotly.newPlot('myDiv_b', resistance_traces,layout_resistance);
+Plotly.newPlot('myDiv_b', voltage_traces,layout_voltage);
 
+Plotly.newPlot('myDiv_c', water_traces,layout_humidity);
 
   });
 

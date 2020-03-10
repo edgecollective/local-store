@@ -110,24 +110,25 @@ app.post("/api/user/", (req, res, next) => {
     console.log(object)
 
    var temp = object.temperatureSensor[2]; // temp
-   var lat = object.analogInput[6]; // bat voltage
-   var lon = object.temperatureSensor[1]; // VWC
+   var batt = object.analogInput[6]; // bat voltage
+   var vwc = object.temperatureSensor[1]; // VWC
 
    var ts = Math.round((new Date()).getTime() / 1000);
 
    var alt = 2.;
    
     var data = {
-        latitude: lat,
-        longitude: lon,
-        altitude: alt,
-        temperature: temp
-        //priv_key: req.body.private_key
+        temperature: temp,
+        vwc: vwc,
+        batt: batt, 
     }
 
 //	this
-    var sql ='INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
-    var params =[ts,data.latitude, data.longitude, data.altitude, data.temperature]
+    //var sql ='INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
+    var sql ='INSERT INTO user (dateTime,vwc,batt,temperature) VALUES (?,?,?,?)'
+
+	
+	var params =[ts,data.vwc, data.batt, data.temperature]
     db.run(sql, params, function (err, result) {
         if (err){
             res.status(400).json({"error": err.message})

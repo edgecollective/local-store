@@ -78,6 +78,18 @@ var temp_trace = {
   //marker: { size: 6, color: 'red'}
 };
 
+var vwc_trace = {
+  //x: xvals.reverse(),
+  x: xvals,
+ // x: timestamp,
+  y: vwc,
+  //mode: 'markers',
+  mode: 'lines+markers',
+  type: 'scatter',
+  //marker: { size: 6, color: 'red'}
+};
+
+
 var layout_temp = {
 /*   xaxis: {
     range: [ 15, 25 ]
@@ -92,7 +104,7 @@ var layout_temp = {
     title: {
       text: 'Temp (C)',
     },
-	  range: [15,32]
+	  //range: [15,32]
   },
   xaxis: {
     title: {
@@ -101,11 +113,35 @@ var layout_temp = {
   }
 };
 
+var layout_vwc = {
+/*   xaxis: {
+    range: [ 15, 25 ]
+  },
+
+  yaxis: {
+    range: [15, 25]
+  },
+*/
+  title:'Volumetric Water Content',
+  yaxis: {
+    title: {
+      text: 'VWC (%)',
+    },
+          //range: [15,32]
+  },
+  xaxis: {
+    title: {
+      text: 'Time',
+    }
+  }
+};
+
+
 var temp_traces = [temp_trace];
+var vwc_traces = [vwc_trace];
 
-
-Plotly.newPlot('myDiv_a', temp_traces,layout_temp);
-
+Plotly.newPlot('myDiv_b', temp_traces,layout_temp);
+Plotly.newPlot('myDiv_a', vwc_traces,layout_vwc);
 
   });
 

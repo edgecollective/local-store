@@ -109,12 +109,12 @@ app.post("/api/user/", (req, res, next) => {
 
     console.log(object)
 
-   var temp = object.temperatureSensor[2];
+   var temp = object.temperatureSensor[2]; // temp
+   var lat = object.analogInput[6]; // bat voltage
+   var lon = object.temperatureSensor[1]; // VWC
 
    var ts = Math.round((new Date()).getTime() / 1000);
 
-   var lat = 3.;
-   var lon = 2.;
    var alt = 2.;
    
     var data = {

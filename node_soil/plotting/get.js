@@ -1,4 +1,15 @@
-
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
 
 // streaming reference
 var interval = setInterval(function() {
@@ -28,7 +39,7 @@ for (i in data) {
   //xvals.push(i);
   //xvals.push(data[i].id);
 //  xvals.push(data[i].id);
-  xvals.push(data[i].dateTime);
+  xvals.push(timeConverter(data[i].dateTime));
   timestamp.push(data[i].dateTime);
   vwc.push(data[i].vwc);
   temp.push(data[i].temp);

@@ -125,6 +125,7 @@ app.post("/api/user/", (req, res, next) => {
         //priv_key: req.body.private_key
     }
 
+//	this
     var sql ='INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
     var params =[ts,data.latitude, data.longitude, data.altitude, data.temperature]
     db.run(sql, params, function (err, result) {

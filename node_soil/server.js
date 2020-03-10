@@ -109,26 +109,29 @@ app.post("/api/user/", (req, res, next) => {
 
     console.log(object)
 
+   var vwc = object.temperatureSensor[1]; // vwc
    var temp = object.temperatureSensor[2]; // temp
+   var permit = object.temperatureSensor[3]; // permit
+   var bulk = object.temperatureSensor[4]; //bulk
+   var pore = object.temperatureSensor[5]*10; // pore -- undoes divide by 10 on feather firmware side
    var batt = object.analogInput[6]; // bat voltage
-   var vwc = object.temperatureSensor[1]; // VWC
 
    var ts = Math.round((new Date()).getTime() / 1000);
 
    var alt = 2.;
    
     var data = {
-        temperature: temp,
-        vwc: vwc,
-        batt: batt, 
+	    vwc:vwc,
+	    temp:temp,
+	    permit:permit,
+	    bulk:bulk,
+	    pore:pore,
+	    batt:batt
     }
 
-//	this
-    //var sql ='INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
-    var sql ='INSERT INTO user (dateTime,vwc,batt,temperature) VALUES (?,?,?,?)'
-
+	var sql = 'INSERT INTO user (dateTime,vwc,temp,permit,bulk,pore,batt) VALUES (?,?,?,?,?,?,?)'
 	
-	var params =[ts,data.vwc, data.batt, data.temperature]
+	var params =[ts,data.vwc,data.temp,data.permit,data.bulk,data.pore,data.batt]
     db.run(sql, params, function (err, result) {
         if (err){
             res.status(400).json({"error": err.message})

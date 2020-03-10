@@ -76,6 +76,7 @@ app.get("/api/user/id", (req, res, next) => {
 app.get("/api/user/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
+    //var sql = "select * from user order by id asc LIMIT 100"
     var sql = "select * from user order by id desc LIMIT 100"
     var params = []
     db.all(sql, params, (err, row) => {

@@ -49,6 +49,17 @@ for (i in data) {
   batt.push(data[i].batt);
 }
 
+// flip b/c of way we got the data form sql:
+
+xvals=xvals.reverse();
+timestamp=timestamp.reverse();
+vwc=vwc.reverse();
+temp=temp.reverse();
+permit=permit.reverse();
+bulk=bulk.reverse();
+pore=pore.reverse();
+batt=batt.reverse();
+
 
 //console.log(xvals);
 
@@ -57,9 +68,10 @@ for (i in data) {
 // reference for styles: https://plot.ly/javascript/line-and-scatter/
 
 var temp_trace = {
-  x: xvals,
+  //x: xvals.reverse(),
+  x: xvals,  
  // x: timestamp,
-  y: temp,
+  y: temp, 
   //mode: 'markers',
   mode: 'lines+markers',
   type: 'scatter',
@@ -84,7 +96,7 @@ var layout_temp = {
   },
   xaxis: {
     title: {
-      text: 'index',
+      text: 'Time',
     }
   }
 };

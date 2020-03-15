@@ -3,7 +3,7 @@ var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
 //const fileCtrl = require('./files.js');
-const posts = require('./posts.json');
+var posts = require('./posts.json');
 const sqliteToCsv = require("sqlite-to-csv");
 const stringify = require('csv-stringify');
 
@@ -121,7 +121,7 @@ app.get("/api/user/csv", (req, res, next) => {
      //    (err) => {console.log(err); });
 	
 //var sql = "select * from user order by timestamp desc LIMIT 10"
-    var sql = "select * from user order by id desc LIMIT 5"
+    var sql = "select * from user order by id desc LIMIT 1000"
     var params = [];
     var fields = ['dateTime','latitude'];
 	var fieldNames = ['Time','Latitude'];
@@ -131,9 +131,9 @@ app.get("/api/user/csv", (req, res, next) => {
           return;
         }
 	//console.log(JSON.stringify(rows));
+	    posts=rows;
         downloadCsv(JSON.stringify(rows),res,req); 	
-      });
-
+        });
 }); 
 
 

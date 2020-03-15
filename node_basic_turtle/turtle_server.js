@@ -2,6 +2,8 @@
 var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
+const fileCtrl = require('./files.js');
+
 const sqliteToCsv = require("sqlite-to-csv");
 
 'use strict';
@@ -91,11 +93,31 @@ app.get("/api/user/latest", (req, res, next) => {
 }); 
 
 
+function downloadCsv(req, res) {
+  stringify(posts, { header: true })
+    .pipe(res);
+};
+
+
 app.get("/api/user/csv", (req, res, next) => {
-    console.log('csv')
+	console.log('csv');
+
     //var sql = "headers on mode csv output data.csv select * from user order by timestamp desc LIMIT 10"
-    sqliteToCsv.toCSV(args,
-         (err) => {console.log(err); });
+    //sqliteToCsv.toCSV(args,
+     //    (err) => {console.log(err); });
+	
+//var sql = "select * from user order by timestamp desc LIMIT 10"
+    var sql = "select * from user order by id desc LIMIT 5"
+    var params = [];
+    var fields = ['dateTime','latitude'];
+	var fieldNames = ['Time','Latitude'];
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+          res.status(400).json({"error":err.message});
+          return;
+        }
+	console.log(JSON.stringify(rows));
+      });
 
 }); 
 
@@ -218,4 +240,6 @@ app.delete("/api/user/:id", (req, res, next) => {
 app.get("/", (req, res, next) => {
     res.json({"message":"Ok"})
 });
+
+app.get("/csv", fileCtrl.downloadCsv); 
 

@@ -1,12 +1,30 @@
- var express = require("express")
+var express = require("express")
 var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
-const fileCtrl = require('./files.js');
-
+//const fileCtrl = require('./files.js');
+const posts = require('./posts.json');
 const sqliteToCsv = require("sqlite-to-csv");
+const stringify = require('csv-stringify');
 
 'use strict';
+
+
+function downloadCsv(posts, req, res) {
+  // adding appropriate headers, so browsers can start downloading
+  // file as soon as this request starts to get served
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=\"' + 'download-' + Date.now() + '.csv\"');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Pragma', 'no-cache');
+
+  // ta-da! this is cool, right?
+  // stringify return a readable stream, that can be directly piped
+  // to a writeable stream which is "res" (the response object from express.js)
+  // since res is an abstraction over node http's response object which supports "streams"
+  stringify(posts, { header: true })
+    .pipe(res);
+};
 
 
 var args = { filePath : "db.sqlite", outputPath : "./mycsv" };
@@ -71,10 +89,6 @@ app.get("/api/user/id", (req, res, next) => {
 });
 
 
-
-
-
-
 app.get("/api/user/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
@@ -116,7 +130,8 @@ app.get("/api/user/csv", (req, res, next) => {
           res.status(400).json({"error":err.message});
           return;
         }
-	console.log(JSON.stringify(rows));
+	//console.log(JSON.stringify(rows));
+        downloadCsv(JSON.stringify(rows),res,req); 	
       });
 
 }); 
@@ -241,5 +256,6 @@ app.get("/", (req, res, next) => {
     res.json({"message":"Ok"})
 });
 
-app.get("/csv", fileCtrl.downloadCsv); 
+app.get("/csv", downloadCsv);  
+
 

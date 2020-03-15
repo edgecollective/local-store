@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 // https://www.npmjs.com/package/csv-export
 
-var HTTP_PORT = 8100
+var HTTP_PORT = 8300
 
 
 // Start server
@@ -76,7 +76,7 @@ app.get("/api/user/id", (req, res, next) => {
 app.get("/api/user/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
-    var sql = "select * from user order by id desc LIMIT 100"
+    var sql = "select * from user order by id desc LIMIT 1000"
     var params = []
     db.all(sql, params, (err, row) => {
         if (err) {
@@ -105,58 +105,60 @@ app.get("/api/user/csv", (req, res, next) => {
 app.post("/api/user/", (req, res, next) => {
     var errors=[]
 
+    console.log(req.body);
+ 
+	var deviceName = req.body.deviceName;
+	var devEUI = req.body.devEUI;
+	var rssi = req.body.rxInfo[0].rssi;
+
+	console.log(deviceName,devEUI,rssi);
+
     var object = req.body.object;
 
-    var temp = object.temperatureSensor['3'];
+    console.log(object);
+    
     var gps = object.gpsLocation;
 
     //console.log(temp);
+    
     console.log("gps",gps);
 
-    var lat = gps['2'].latitude;
-    var lon = gps['2'].longitude;
-    var alt = gps['2'].altitude;
+    var latitude = gps['4'].latitude;
+    var longitude = gps['4'].longitude;
+    var altitude = gps['4'].altitude;
 
-    console.log("lat",lat);
-    console.log("lon",lon);
-    console.log("alt",alt);
-    console.log("temp",temp);
+    var digitalInput = object.digitalInput['2'];
+    var analogInput = object.analogInput['3'];
+    var temperatureSensor = object.temperatureSensor['1'];
 
 
-    //console.log(req.body.object.gpsLocation);
+    console.log("lat",latitude);
+    console.log("lon",longitude);
+    console.log("alt",altitude);
+    console.log("temp",temperatureSensor);
+ 
+    console.log("digital",digitalInput);
+    console.log("analogInput",analogInput);
+    console.log("temperatureSensor",temperatureSensor);
 
-    /*if (!req.body.password){
-        errors.push("No password specified");
-    }
-    if (!req.body.email){
-        errors.push("No email specified");
-    }
-    if (errors.length){
-        res.status(400).json({"error":errors.join(",")});
-        return;
-    }
-    */
    var ts = Math.round((new Date()).getTime() / 1000);
 
     var data = {
-        latitude: lat,
-        longitude: lon,
-        altitude: alt,
-        temperature: temp
-        //priv_key: req.body.private_key
+        latitude: latitude,
+        longitude: longitude,
+        altitude: altitude,
+	digital:digitalInput,
+	analog:analogInput,
+        temperature: temperatureSensor,
+	deviceName:deviceName,
+	    devEUI:devEUI,
+	    rssi:rssi
     }
 
-    //console.log(data.priv_key)
-    //console.log(private_key)
-/*
-    if (data.priv_key.localeCompare(private_key) == 0) {
+	var sql = 'INSERT INTO user (dateTime,latitude,longitude,altitude,temperature,digital,analog,deviceName,devEUI,rssi) VALUES (?,?,?,?,?,?,?,?,?,?)'
 
-        console.log('private key matches!')
-    }
-*/
+    var params =[ts,data.latitude, data.longitude, data.altitude, data.temperature,data.digital,data.analog,data.deviceName,data.devEUI,data.rssi]
 
-    var sql ='INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
-    var params =[ts,data.latitude, data.longitude, data.altitude, data.temperature]
     db.run(sql, params, function (err, result) {
         if (err){
             res.status(400).json({"error": err.message})

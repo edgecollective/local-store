@@ -25,9 +25,9 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             console.log("already created");
         }else{
             // Table just created, creating some rows
-            var insert = 'INSERT INTO user (dateTime,current,voltage,resistance) VALUES (?,?,?.?)'
+            var insert = 'INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
             var ts = Math.round((new Date()).getTime() / 1000);
-            db.run(insert, [ts,0.0,0.0,0.0])
+            db.run(insert, [ts,0.0,0.0,0.0,0.0])
             //db.run(insert, [12123124,19.2,23.2])
         }
     })  

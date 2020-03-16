@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Quick Start - Leaflet</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="./turtle_l.png" />
+
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+
+
+	
+</head>
+<body>
+
+
+	<!-- <script src="get.js"></script>-->
+
+	<script>
+
+
+var urlParams = new URLSearchParams(window.location.search);
+
+var limit = 100;
+
+var param_limit = urlParams.get('limit');
+
+if (param_limit !== null) {
+limit = parseInt(param_limit);
+}
+
+
+/*
+if (console.log(urlParams.has('limit'))) {
+	console.log('limit=');
+	console.log(urlParmas.get('limit'));
+}
+*/
+
+
+function connectTheDots(data){
+  var c = [];
+  for(i in data) {
+      var x = data[i].latitude;
+      var y = data[i].longitude;
+      if (x>0) {
+      c.push([x, y]);
+      }
+  }
+  return c;
+}
+
+// streaming reference
+var interval = setInterval(function() {
+
+//fetch('http://localhost:8000/api/users/')
+//fetch('http://localhost:8000/api/user/latest')
+var base_url = 'http://64.227.0.108:8300/api/user/latest?limit='
+var fetch_url = base_url.concat(limit.toString())
+
+	
+	//fetch('http://64.227.0.108:8400/api/user/latest?limit=100')
+
+	fetch(fetch_url)
+  .then((response) => {
+    return response.json();
+  })
+  .then((myJson) => {
+    //console.log("hallo");
+    //console.log(myJson);
+
+var data = myJson.data;
+var timestamp = [];
+var latitude = [];
+var longitude = [];
+var altitude = [];
+var temperature = [];
+var xvals = [];
+var deviceName = [];
+
+// get the data
+for (i in data) {
+
+  //xvals.push(i);
+  xvals.push(data[i].id);
+  timestamp.push(data[i].timestamp);
+  latitude.push(data[i].latitude);
+  longitude.push(data[i].longitude);
+  altitude.push(data[i].altitude);
+  temperature.push(data[i].temperature);
+deviceName.push(data[i].deviceName);
+}
+
+
+
+var mymap = L.map('mapid').setView([43.9926, -73.1494], 15);
+
+
+
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+  maxZoom: 18,
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  id: 'mapbox/streets-v11'
+}).addTo(mymap);
+
+var pathCoords = connectTheDots(data);
+console.log(pathCoords);
+
+var pathLine = L.polyline(pathCoords).addTo(mymap);
+
+var maxCount = 100
+
+for (var i = 0; i < xvals.length; i++) {
+
+  var lat = latitude[i];
+  var lon = longitude[i];
+  var temp = temperature[i];
+  var alt = altitude[i];
+  var deviceName = deviceName[i].toString();
+
+	var myColor = 'red';
+
+	/*
+	if (deviceName.localeCompare('neds_gnat1')) {
+	myColor = 'green';	
+	}
+	else if (deviceName.localeCompare('neds_longcricket1')) {
+        myColor = 'blue';      
+        }
+*/
+  if (lat>0) {
+  L.circle([lat, lon], 10, {
+    color: myColor,
+    fillColor: myColor,
+    fillOpacity: 0.1
+    }).addTo(mymap).bindPopup("Turtle: Bob");
+ }
+}
+
+
+mymap.on('click', onMapClick);
+
+
+  });
+
+  if(++cnt === 100) clearInterval(interval);
+}, 1000);
+
+	</script>
+
+
+<div id="mapid" style="width: 80%; height: 600px;"></div>
+
+</body>
+</html>

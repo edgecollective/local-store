@@ -58,7 +58,7 @@ function connectTheDots(data){
 }
 
 // streaming reference
-var interval = setInterval(function() {
+//var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
 //fetch('http://localhost:8000/api/user/latest')
@@ -85,6 +85,7 @@ var temperature = [];
 var xvals = [];
 var deviceName = [];
 
+//	  console.log(data);
 // get the data
 for (i in data) {
 
@@ -96,13 +97,12 @@ for (i in data) {
   altitude.push(data[i].altitude);
   temperature.push(data[i].temperature);
   deviceName.push(data[i].deviceName);
-	//console.log(deviceName);
+  //console.log(me);
 }
 
-//console.log(deviceName);
+console.log(deviceName);
 
 var mymap = L.map('mapid').setView([43.9926, -73.1494], 15);
-
 
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -113,8 +113,8 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
   id: 'mapbox/streets-v11'
 }).addTo(mymap);
 
-var pathCoords = connectTheDots(data);
-console.log(pathCoords);
+//var pathCoords = connectTheDots(data);
+//console.log(pathCoords);
 
 //var pathLine = L.polyline(pathCoords).addTo(mymap);
 
@@ -126,41 +126,35 @@ for (var i = 0; i < xvals.length; i++) {
   var lon = longitude[i];
   var temp = temperature[i];
   var alt = altitude[i];
-  var deviceName = deviceName[i].toString();
+  var devName = deviceName[i].toString();
 
-	var myColor = 'blue';
+	var myColor = 'green';
 
-        if (deviceName.localeCompare('neds_gnat1')) {
-        myColor = 'green';
+        if (devName.localeCompare('neds_gnat1')) {
+        myColor = 'red';
 		console.log(i,myColor);
         }
-        else if (deviceName.localeCompare('neds_longcricket1')) {
+        else if (devName.localeCompare('neds_longcricket1')) {
         myColor = 'blue';      
 		console.log(i,myColor);
         }
 
-  if (lat>0) {
+
   L.circle([lat, lon], 10, {
     color: myColor,
     fillColor: 'green',
     fillOpacity: 0.1
     }).addTo(mymap).bindPopup("Turtle: Bob");
-  }
+
 }
-
-
-mymap.on('click', onMapClick);
-
 
   });
 
-  if(++cnt === 100) clearInterval(interval);
-}, 1000);
 
 	</script>
 
 
-<div id="mapid" style="width: 80%; height: 600px;"></div>
+<div id="mapid" style="width: 100%; height: 600px;"></div>
 
 </body>
 </html>

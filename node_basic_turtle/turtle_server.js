@@ -92,7 +92,23 @@ app.get("/api/user/id", (req, res, next) => {
 app.get("/api/user/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
-    var sql = "select * from user order by id desc LIMIT 1000"
+   // var sql = "select * from user order by id desc LIMIT 1000"
+
+	 var N = 1000;
+    if (req.query.limit) {
+	    N = parseInt(req.query.limit);
+    }
+    
+	console.log(req.query.limit);
+    //var sql = "headers on mode csv output data.csv select * from user order by timestamp desc LIMIT 10"
+    //sqliteToCsv.toCSV(args,
+     //    (err) => {console.log(err); });
+
+//var sql = "select * from user order by timestamp desc LIMIT 10"
+    //var sql = "select * from user order by id desc LIMIT 1000"
+    var sql = "select * from user order by id desc LIMIT "
+    var sql = sql.concat(N.toString());
+
     var params = []
     db.all(sql, params, (err, row) => {
         if (err) {
@@ -116,12 +132,16 @@ function downloadCsv(req, res) {
 app.get("/api/user/csv", (req, res, next) => {
 	console.log('csv');
 
+	var N = 1000;
+
     //var sql = "headers on mode csv output data.csv select * from user order by timestamp desc LIMIT 10"
     //sqliteToCsv.toCSV(args,
      //    (err) => {console.log(err); });
 	
 //var sql = "select * from user order by timestamp desc LIMIT 10"
-    var sql = "select * from user order by id desc LIMIT 1000"
+    //var sql = "select * from user order by id desc LIMIT 1000"
+    var sql = "select * from user order by id desc LIMIT "
+    var sql = sql.concat(N.toString());
     var params = [];
     var fields = ['dateTime','latitude'];
 	var fieldNames = ['Time','Latitude'];

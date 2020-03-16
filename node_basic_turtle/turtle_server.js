@@ -132,7 +132,10 @@ function downloadCsv(req, res) {
 app.get("/api/user/csv", (req, res, next) => {
 	console.log('csv');
 
-	var N = 1000;
+	 var N = 1000;
+    if (req.query.limit) {
+            N = parseInt(req.query.limit);
+    }
 
     //var sql = "headers on mode csv output data.csv select * from user order by timestamp desc LIMIT 10"
     //sqliteToCsv.toCSV(args,

@@ -1,29 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-	
-	<title>Quick Start - Leaflet</title>
 
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-
-    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
-
-
-	
+	<link rel="shortcut icon" type="image/x-icon" href="./turtle_l.png" />
+<style>
+body {
+	background-color: powderblue;
+	font-family: Arial, Helvetica, sans-serif;
+}
+h1   {color: green;}
+p    {color: red;}
+</style>	
 </head>
 <body>
+	<h1>Turtle Tracking<h1>
+	<h2>Map</h2>
 
+	<b>Live map</b> that plots latest <b>N</b> datapoints, with <b>N</b> equal to:
+	<ul>
+		<li><a href="./map.html?limit=10">10</b></a></li>
+		<li><a href="./map.html?limit=100">100</b></a></li>
+		<li><a href="./map.html?limit=1000">1000</b></a></li>
+		<li><a href="./map.html?limit=10000000">entire dataset</b></a></li>
+	</ul>
 
-  <script src="get.js"></script>
+	<h2>Data / API</h2>
 
-<div id="mapid" style="width: 80%; height: 600px;"></div>
+	<b>JSON</b> that includes latest <b>N</b> datapoints, with <b>N</b> equal to:
+	      <ul>
+                <li><a href="http://64.227.0.108:8300/api/user/latest?limit=10">10</b></a></li>
+		<li><a href="http://64.227.0.108:8300/api/user/latest?limit=100">100</b></a></li>
+		<li><a href="http://64.227.0.108:8300/api/user/latest?limit=1000">1000</b></a></li>
+		<li><a href="http://64.227.0.108:8300/api/user/latest?limit=1000000">entire dataset</b></a></li>
+
+        </ul>
+
+	<b>CSV</b> that includes latest <b>N</b> datapoints, with <b>N</b> equal to:
+              <ul>
+		       <li><a href="http://64.227.0.108:8300/api/user/csv?limit=10">10</b></a></li>
+                <li><a href="http://64.227.0.108:8300/api/user/csv?limit=100">100</b></a></li>
+                <li><a href="http://64.227.0.108:8300/api/user/csv?limit=1000">1000</b></a></li>
+                <li><a href="http://64.227.0.108:8300/api/user/csv?limit=1000000">entire dataset</b></a></li>
+        </ul>
+
 
 </body>
 </html>

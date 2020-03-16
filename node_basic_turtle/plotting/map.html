@@ -84,6 +84,7 @@ var altitude = [];
 var temperature = [];
 var xvals = [];
 var deviceName = [];
+var rssi = [];
 
 //	  console.log(data);
 // get the data
@@ -97,6 +98,8 @@ for (i in data) {
   altitude.push(data[i].altitude);
   temperature.push(data[i].temperature);
   deviceName.push(data[i].deviceName);
+  rssi.push(data[i].rssi);
+
   //console.log(me);
 }
 
@@ -127,23 +130,37 @@ for (var i = 0; i < xvals.length; i++) {
   var temp = temperature[i];
   var alt = altitude[i];
   var devName = deviceName[i].toString();
+  var signal = parseInt(rssi[i]);
+
+  var fillcol = 'green';
+
+	console.log(signal);
+
+	if(signal>-90) {
+		fillcol='green'
+	}
+	if((signal<=-90)&&(signal>-110)) {
+		fillcol='yellow'
+	}
+        if(signal<-110) {
+	  fillcol='red';
+	  console.log('low');
+        }
 
 	var myColor = 'green';
 
         if (devName.localeCompare('neds_gnat1')) {
-        myColor = 'red';
-		console.log(i,myColor);
+        myColor = 'black';
         }
         else if (devName.localeCompare('neds_longcricket1')) {
-        myColor = 'blue';      
-		console.log(i,myColor);
+        myColor = 'white';      
         }
 
 
-  L.circle([lat, lon], 10, {
-    color: myColor,
-    fillColor: 'green',
-    fillOpacity: 0.1
+  L.circle([lat, lon], 15, {
+    color: fillcol,
+    fillColor: fillcol, 
+    fillOpacity: .3 
     }).addTo(mymap).bindPopup("Turtle: Bob");
 
 }

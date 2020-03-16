@@ -1,12 +1,12 @@
 // package use to transform json to csv string
 const stringify = require('csv-stringify');
-const posts = require('./posts.json');
+//const posts = require('./posts.json');
 
 module.exports = {
   downloadCsv
 };
 
-function downloadCsv(req, res) {
+function downloadCsv(posts, req, res) {
   // adding appropriate headers, so browsers can start downloading
   // file as soon as this request starts to get served
   res.setHeader('Content-Type', 'text/csv');

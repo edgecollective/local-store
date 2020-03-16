@@ -17,7 +17,7 @@ var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
 //fetch('http://localhost:8000/api/user/latest')
-fetch('http://157.245.241.239:8100/api/user/latest')
+fetch('http://64.227.0.108:8300/api/user/latest')
   .then((response) => {
     return response.json();
   })
@@ -33,8 +33,10 @@ var altitude = [];
 var temperature = [];
 var xvals = [];
 
+
 // get the data
 for (i in data) {
+
   //xvals.push(i);
   xvals.push(data[i].id);
   timestamp.push(data[i].timestamp);
@@ -46,8 +48,7 @@ for (i in data) {
 
 
 
-
-var mymap = L.map('mapid').setView([42.376, -71.0988], 15);
+var mymap = L.map('mapid').setView([43.9926, -73.1494], 15);
 
     
 
@@ -64,15 +65,18 @@ console.log(pathCoords);
 
 var pathLine = L.polyline(pathCoords).addTo(mymap);
 
+var maxCount = 100
+
 for (var i = 0; i < xvals.length; i++) {
 
+	i
   var lat = latitude[i];
   var lon = longitude[i];
   var temp = temperature[i];
   var alt = altitude[i];
 
   if (lat>0) {
-  L.circle([lat, lon], 30, {
+  L.circle([lat, lon], 3, {
     color: 'red',
     fillColor: 'green',
     fillOpacity: 0.1

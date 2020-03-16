@@ -83,7 +83,7 @@ var longitude = [];
 var altitude = [];
 var temperature = [];
 var xvals = [];
-
+var deviceName = [];
 
 // get the data
 for (i in data) {
@@ -95,8 +95,8 @@ for (i in data) {
   longitude.push(data[i].longitude);
   altitude.push(data[i].altitude);
   temperature.push(data[i].temperature);
+  deviceName.push(data[i].deviceName);
 }
-
 
 
 var mymap = L.map('mapid').setView([43.9926, -73.1494], 15);
@@ -114,7 +114,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 var pathCoords = connectTheDots(data);
 console.log(pathCoords);
 
-var pathLine = L.polyline(pathCoords).addTo(mymap);
+//var pathLine = L.polyline(pathCoords).addTo(mymap);
 
 var maxCount = 100
 
@@ -125,9 +125,19 @@ for (var i = 0; i < xvals.length; i++) {
   var temp = temperature[i];
   var alt = altitude[i];
 
+	var myColor = 'blue';
+/*
+        if (deviceName.localeCompare('neds_gnat1')) {
+        myColor = 'green';      
+        }
+        else if (deviceName.localeCompare('neds_longcricket1')) {
+        myColor = 'blue';      
+        }
+*/
+
   if (lat>0) {
-  L.circle([lat, lon], 3, {
-    color: 'red',
+  L.circle([lat, lon], 10, {
+    color: myColor,
     fillColor: 'green',
     fillOpacity: 0.1
     }).addTo(mymap).bindPopup("Turtle: Bob");

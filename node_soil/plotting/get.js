@@ -33,6 +33,9 @@ var permit = [];
 var bulk = [];
 var pore = [];
 var batt = [];
+var deviceName = [];
+var rssi = [];
+
 
 // get the data
 for (i in data) {
@@ -47,6 +50,7 @@ for (i in data) {
   bulk.push(data[i].bulk);
   pore.push(data[i].pore);
   batt.push(data[i].batt);
+   rssi.push(data[i].rssi);
 }
 
 // flip b/c of way we got the data form sql:
@@ -59,7 +63,7 @@ permit=permit.reverse();
 bulk=bulk.reverse();
 pore=pore.reverse();
 batt=batt.reverse();
-
+rssi=rssi.reverse();
 
 //console.log(xvals);
 
@@ -77,6 +81,18 @@ var temp_trace = {
   type: 'scatter',
   //marker: { size: 6, color: 'red'}
 };
+
+var rssi_trace = {
+  //x: xvals.reverse(),
+  x: xvals,
+ // x: timestamp,
+  y: rssi,
+  //mode: 'markers',
+  mode: 'lines+markers',
+  type: 'scatter',
+  //marker: { size: 6, color: 'red'}
+};
+
 
 var vwc_trace = {
   //x: xvals.reverse(),
@@ -113,6 +129,30 @@ var layout_temp = {
   }
 };
 
+var layout_rssi = {
+/*   xaxis: {
+    range: [ 15, 25 ]
+  },
+  
+  yaxis: {
+    range: [15, 25]
+  }, 
+*/
+  title:'Signal Strength',
+  yaxis: {
+    title: {
+      text: 'RSSI',
+    },
+          //range: [15,32]
+  },
+  xaxis: {
+    title: {
+      text: 'Time',
+    }
+  }
+};
+
+
 var layout_vwc = {
 /*   xaxis: {
     range: [ 15, 25 ]
@@ -139,9 +179,11 @@ var layout_vwc = {
 
 var temp_traces = [temp_trace];
 var vwc_traces = [vwc_trace];
+var rssi_traces = [rssi_trace];
 
 Plotly.newPlot('myDiv_b', temp_traces,layout_temp);
 Plotly.newPlot('myDiv_a', vwc_traces,layout_vwc);
+Plotly.newPlot('myDiv_c', rssi_traces,layout_rssi);
 
   });
 

@@ -161,11 +161,46 @@ for (var i = 0; i < xvals.length; i++) {
     color: fillcol,
     fillColor: fillcol, 
     fillOpacity: .3 
-    }).addTo(mymap).bindPopup("Turtle: Bob");
+    }).addTo(mymap).bindPopup("--");
 
 }
 
+L.control.scale().addTo(mymap);
+
+var radius = 1609.344;
+var home_lat = 43.9926;
+var home_lon = -73.1513;
+
+L.circle([home_lat, home_lon], radius, {
+    color: 'black',
+	fillColor: 'transparent',
+    //fillColor: fillcol, 
+    fillOpacity: .3,
+	weight:1,
+    }).addTo(mymap);
+
+
+L.circle([home_lat, home_lon], 2*radius, {
+    color: 'black',
+        fillColor: 'transparent',
+    //fillColor: fillcol,
+	weight: 1,
+    fillOpacity: .3 
+    }).addTo(mymap);
+
+L.circle([home_lat, home_lon], 3*radius, {
+    color: 'black',
+        fillColor: 'transparent',
+    //fillColor: fillcol,
+        weight: 1,
+    fillOpacity: .3
+    }).addTo(mymap);
+
+
+
   });
+
+
 
 
 	</script>

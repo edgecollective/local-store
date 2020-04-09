@@ -16,7 +16,7 @@ function timeConverter(UNIX_timestamp){
 
 //fetch('http://localhost:8000/api/users/')
 
-fetch('http://64.227.0.108:8200/api/user/latest')
+fetch('http://192.168.1.245:8200/api/user/latest')
   .then((response) => {
     return response.json();
   })
@@ -132,7 +132,7 @@ var layout_humid = {
 
 
 var temp_traces = [temp_trace];
-var humid_traces = [vwc_trace];
+var humid_traces = [humid_trace];
 
 
 Plotly.newPlot('myDiv_a', temp_traces,layout_temp);

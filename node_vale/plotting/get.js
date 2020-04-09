@@ -1,23 +1,22 @@
-
-function connectTheDots(data){
-  var c = [];
-  for(i in data) {
-      var x = data[i].latitude;
-      var y = data[i].longitude;
-      if (x>0) {
-      c.push([x, y]);
-      }
-  }
-  return c;
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
 }
 
-
 // streaming reference
-var interval = setInterval(function() {
+//var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
-//fetch('http://localhost:8000/api/user/latest')
-fetch('http://157.245.241.239:8100/api/user/latest')
+
+fetch('http://64.227.0.108:8200/api/user/latest')
   .then((response) => {
     return response.json();
   })
@@ -26,67 +25,122 @@ fetch('http://157.245.241.239:8100/api/user/latest')
     //console.log(myJson);
 
 var data = myJson.data;
+          console.log(data);
+var xvals = [];	  
 var timestamp = [];
-var latitude = [];
-var longitude = [];
-var altitude = [];
-var temperature = [];
-var xvals = [];
+var temp = [];
+var humid = [];
+var press = [];
+
 
 // get the data
 for (i in data) {
   //xvals.push(i);
-  xvals.push(data[i].id);
-  timestamp.push(data[i].timestamp);
-  latitude.push(data[i].latitude);
-  longitude.push(data[i].longitude);
-  altitude.push(data[i].altitude);
-  temperature.push(data[i].temperature);
+  //xvals.push(data[i].id);
+//  xvals.push(data[i].id);
+  xvals.push(timeConverter(data[i].dateTime));
+  timestamp.push(data[i].dateTime);
+  temp.push(data[i].temperature);
+  humid.push(data[i].humidity);
+  press.push(data[i].pressure);
 }
 
+// flip b/c of way we got the data form sql:
+
+xvals=xvals.reverse();
+timestamp=timestamp.reverse();
+temp=temp.reverse();
+humid=humid.reverse();
+press=press.reverse();
 
 
+//console.log(xvals);
 
-var mymap = L.map('mapid').setView([42.376, -71.0988], 15);
+// reference for plotly graphing: https://plot.ly/javascript/line-and-scatter/
+// example for plotly graphing in a page: https://codepen.io/pen/?&editable=true
+// reference for styles: https://plot.ly/javascript/line-and-scatter/
 
-    
+var temp_trace = {
+  //x: xvals.reverse(),
+  x: xvals,  
+ // x: timestamp,
+  y: temp, 
+  //mode: 'markers',
+  mode: 'lines+markers',
+  type: 'scatter',
+  //marker: { size: 6, color: 'red'}
+};
 
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-  maxZoom: 18,
-  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  id: 'mapbox/streets-v11'
-}).addTo(mymap);
+var humid_trace = {
+  //x: xvals.reverse(),
+  x: xvals,
+ // x: timestamp,
+  y: humid,
+  //mode: 'markers',
+  mode: 'lines+markers',
+  type: 'scatter',
+  //marker: { size: 6, color: 'red'}
+};
 
-var pathCoords = connectTheDots(data);
-console.log(pathCoords);
 
-var pathLine = L.polyline(pathCoords).addTo(mymap);
-
-for (var i = 0; i < xvals.length; i++) {
-
-  var lat = latitude[i];
-  var lon = longitude[i];
-  var temp = temperature[i];
-  var alt = altitude[i];
-
-  if (lat>0) {
-  L.circle([lat, lon], 30, {
-    color: 'red',
-    fillColor: 'green',
-    fillOpacity: 0.1
-    }).addTo(mymap).bindPopup("Turtle: Bob");
-  }
-}
+var layout_temp = {
+/*   xaxis: {
+    range: [ 15, 25 ]
+  },
   
+  yaxis: {
+    range: [15, 25]
+  }, 
+*/
+  title:'Temperature',
+  yaxis: {
+    title: {
+      text: 'Temp (C)',
+    },
+	  //range: [15,32]
+  },
+  xaxis: {
+    title: {
+      text: 'Time',
+    }
+  }
+};
 
-mymap.on('click', onMapClick);
+var layout_humid = {
+/*   xaxis: {
+    range: [ 15, 25 ]
+  },
+  
+  yaxis: {
+    range: [15, 25]
+  }, 
+*/
+  title:'Humidity',
+  yaxis: {
+    title: {
+      text: 'RH (%)',
+    },
+          //range: [15,32]
+  },
+  xaxis: {
+    title: {
+      text: 'Time',
+    }
+  }
+};
 
+
+
+var temp_traces = [temp_trace];
+var humid_traces = [vwc_trace];
+
+
+Plotly.newPlot('myDiv_a', temp_traces,layout_temp);
+Plotly.newPlot('myDiv_b', humid_traces,layout_humid);
 
   });
 
-  if(++cnt === 100) clearInterval(interval);
-}, 1000);
+  //if(++cnt === 100) clearInterval(interval);
+//}, 300);
 
 

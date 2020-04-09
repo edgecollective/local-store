@@ -3,8 +3,12 @@ var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
 const sqliteToCsv = require("sqlite-to-csv");
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
-'use strict';
+//'use strict';
 
 
 var args = { filePath : "db.sqlite", outputPath : "./mycsv" };
@@ -19,9 +23,7 @@ var private_key = config.private_key;
 
 console.log(private_key);
 
-var bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
 
 // https://www.npmjs.com/package/csv-export
 
@@ -102,31 +104,33 @@ app.get("/api/user/csv", (req, res, next) => {
 
 
 
-app.post("/api/user/", (req, res, next) => {
+app.post("/api/user", (req, res, next) => {
     var errors=[]
 
     var object = req.body.object;
 
-    console.log(object)
+    console.log('Got body:', req.body);
 
-   var temp = object.temperatureSensor[2]; // temp
-   var lat = object.analogInput[6]; // bat voltage
-   var lon = object.temperatureSensor[1]; // VWC
+    console.log(req.body.pressure)
+
+
+   var temperature = req.body.temp; // temp
+   var humidity = req.body.humidity; // bat voltage
+   var pressure = req.body.pressure; // VWC
 
    var ts = Math.round((new Date()).getTime() / 1000);
 
    var alt = 2.;
    
     var data = {
-        latitude: lat,
-        longitude: lon,
-        altitude: alt,
-        temperature: temp
+        temp: temperature,
+        humid: humidity,
+        press: pressure
         //priv_key: req.body.private_key
     }
 
-    var sql ='INSERT INTO user (dateTime,latitude,longitude,altitude,temperature) VALUES (?,?,?,?,?)'
-    var params =[ts,data.latitude, data.longitude, data.altitude, data.temperature]
+    var sql ='INSERT INTO user (dateTime,temperature,humidity,pressure) VALUES (?,?,?,?)'
+    var params =[ts,data.temp, data.humid, data.press]
     db.run(sql, params, function (err, result) {
         if (err){
             res.status(400).json({"error": err.message})

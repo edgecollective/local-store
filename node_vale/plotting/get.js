@@ -12,7 +12,7 @@ function timeConverter(UNIX_timestamp){
 }
 
 // streaming reference
-//var interval = setInterval(function() {
+var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
 
@@ -140,7 +140,7 @@ Plotly.newPlot('myDiv_b', humid_traces,layout_humid);
 
   });
 
-  //if(++cnt === 100) clearInterval(interval);
-//}, 300);
+if(++cnt === 100) clearInterval(interval);
+}, 300);
 
 

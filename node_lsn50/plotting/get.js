@@ -4,7 +4,7 @@
 var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
-fetch('http://64.227.0.108:8100/api/user/latest')
+fetch('http://64.227.0.108:8200/api/user/latest')
   .then((response) => {
     return response.json();
   })

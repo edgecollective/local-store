@@ -15,18 +15,21 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         db.run(`CREATE TABLE user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             dateTime INTEGER,
-            adc FLOAT(8,4),
-            batv FLOAT(8,4),
-            tempc FLOAT(4,2)
+	    deviceName TEXT,
+            devEUI TEXT,
+            rssi FLOAT(2,2),
+	    batV FLOAT(4,2),
+	    analog FLOAT(4,2),
+	    temperature FLOAT(4,2)	
             )`,(err) => {
         if (err) {
             // Table already created
             console.log("already created");
         }else{
             // Table just created, creating some rows
-            var insert = 'INSERT INTO user (dateTime,adc,batv,tempc) VALUES (?,?,?,?)'
+            var insert ='INSERT INTO user (dateTime,deviceName,devEUI,rssi,batV,analog,temperature) VALUES (?,?,?,?,?,?,?)'
             var ts = Math.round((new Date()).getTime() / 1000);
-            db.run(insert, [ts,0.0,0.0,0.0])
+            db.run(insert, [ts,0.0,0.0,0.0,0.0,0.0,0.0])
             //db.run(insert, [12123124,19.2,23.2])
         }
     })  

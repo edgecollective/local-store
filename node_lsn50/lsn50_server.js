@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 
 // https://www.npmjs.com/package/csv-export
 
-var HTTP_PORT = 8100
+var HTTP_PORT = 8500
 
 
 // Start server
@@ -105,24 +105,31 @@ app.get("/api/user/csv", (req, res, next) => {
 app.post("/api/user/", (req, res, next) => {
     var errors=[]
 
+console.log(req.body);
+
+        var deviceName = req.body.deviceName;
+        var devEUI = req.body.devEUI;
+        var rssi = req.body.rxInfo[0].rssi;
+
+        console.log(deviceName,devEUI,rssi);
+
     var object = req.body.object;
+    var batV = req.body.object.BatV;
+    var analog = req.body.object.ADC_CH0V;
+    var temperature = req.body.object.Vegetronix_Temp_C;
 
     console.log(object);
 
-    var tempc= object.temperatureSensor[2];
-    var batv = object.analogInput[3];
-    var adc = object.humiditySensor[1];
-
-    console.log(tempc);
-    console.log(batv);
-    console.log(adc);
 
    var ts = Math.round((new Date()).getTime() / 1000);
 
     var data = {
-	adc:adc,
-        batv: batv,
-        tempc: tempc
+	    deviceName:deviceName,
+	devEUI:devEUI,
+	rssi:rssi,
+	    batV:batV,
+	    analog:analog,
+	    temperature:temperature
         //priv_key: req.body.private_key
     }
 
@@ -135,8 +142,9 @@ app.post("/api/user/", (req, res, next) => {
     }
 */
 
-    var sql ='INSERT INTO user (dateTime,adc,batv,tempc) VALUES (?,?,?,?)'
-    var params =[ts,data.adc, data.batv, data.tempc]
+var sql ='INSERT INTO user (dateTime,deviceName,devEUI,rssi,batV,analog,temperature) VALUES (?,?,?,?,?,?,?)'
+
+    var params =[ts,data.deviceName,data.devEUI,data.rssi,data.batV,data.analog,data.temperature]
     db.run(sql, params, function (err, result) {
         if (err){
             res.status(400).json({"error": err.message})

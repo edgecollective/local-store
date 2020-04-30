@@ -15,7 +15,7 @@ function timeConverter(UNIX_timestamp){
 }
 
 // streaming reference
-var interval = setInterval(function() {
+//var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
 fetch('http://64.227.0.108:8500/api/user/latest')
@@ -27,7 +27,6 @@ fetch('http://64.227.0.108:8500/api/user/latest')
     //console.log(myJson);
 
 var data = myJson.data;
-          console.log(data);
 var xvals = [];	  
 var timestamp = [];
 var deviceName = [];
@@ -35,15 +34,15 @@ var devEUI = [];
 var rssi = [];
 var batV = [];
 var analog = [];
-var temperature = [];
-
+var tempVegex = [];
+var tempOnewire = [];
 
 // get the data
 for (i in data) {
-  //xvals.push(i);
-  //xvals.push(data[i].id);
-//  xvals.push(data[i].id);
-	console.log(timeConverter(data[i].dateTime));
+	var thisDevice = data[i].deviceName;
+	if (thisDevice.localeCompare('lsn50_001')==0) {
+		//console.log('equal!');
+	//console.log(timeConverter(data[i].dateTime));
   xvals.push(timeConverter(data[i].dateTime));
   timestamp.push(data[i].dateTime);
   deviceName.push(data[i].deviceName);
@@ -51,7 +50,9 @@ for (i in data) {
   rssi.push(data[i].rssi);
   batV.push(data[i].batV);
   analog.push(data[i].analog);
-  temperature.push(data[i].temperature);
+  tempVegex.push(9*data[i].tempVegex/5 + 32);
+  tempOnewire.push(9*data[i].tempOnewire/5 + 32);
+	}
 }
 
 // flip b/c of way we got the data form sql:
@@ -63,32 +64,55 @@ devEUI=devEUI.reverse();
 rssi=rssi.reverse();
 batV=batV.reverse();
 analog=analog.reverse();
-temperature=temperature.reverse();
+tempVegex=tempVegex.reverse();
+tempOnewire=tempOnewire.reverse();
 //console.log(xvals);
 
 // reference for plotly graphing: https://plot.ly/javascript/line-and-scatter/
 // example for plotly graphing in a page: https://codepen.io/pen/?&editable=true
 // reference for styles: https://plot.ly/javascript/line-and-scatter/
 
-var temp_trace = {
+//console.log(xvals);
+
+//console.log(xvals.length);
+//xvals[38] = "2020-4-01 0:2:45";
+
+console.log(xvals);
+
+
+var vegex_trace = {
   //x: xvals.reverse(),
   x: xvals,  
- // x: timestamp,
-  y: temperature, 
+  //x: timestamp,
+  y: tempVegex, 
   //mode: 'markers',
   mode: 'markers',
   type: 'scatter',
+	name: 'vegex (F)'
+  //marker: { size: 6, color: 'red'}
+};
+
+var onewire_trace = {
+  //x: xvals.reverse(),
+  x: xvals,
+  //x: timestamp,
+  y: tempOnewire,
+  //mode: 'markers',
+  mode: 'markers',
+  type: 'scatter',
+	name: 'onewire (F)'
   //marker: { size: 6, color: 'red'}
 };
 
 var rssi_trace = {
   //x: xvals.reverse(),
   x: xvals,
- // x: timestamp,
+  //x: timestamp,
   y: rssi,
   //mode: 'markers',
   mode: 'markers',
   type: 'scatter',
+	name: 'RSSI'
   //marker: { size: 6, color: 'red'}
 };
 
@@ -105,7 +129,7 @@ var layout_temp = {
   title:'Temperature',
   yaxis: {
     title: {
-      text: 'Temp (C)',
+      text: 'Temp (F)',
     },
 	  //range: [15,32]
   },
@@ -140,8 +164,7 @@ var layout_rssi = {
 };
 
 
-
-var temp_traces = [temp_trace];
+var temp_traces = [vegex_trace,onewire_trace];
 var rssi_traces = [rssi_trace];
 
 Plotly.newPlot('myDiv_a', temp_traces,layout_temp);
@@ -149,7 +172,7 @@ Plotly.newPlot('myDiv_b', rssi_traces,layout_rssi);
 
   });
 
-  if(++cnt === 100) clearInterval(interval);
-}, 1000);
+//  if(++cnt === 100) clearInterval(interval);
+//}, 10000);
 
 

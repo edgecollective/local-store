@@ -1,18 +1,22 @@
 function timeConverter(UNIX_timestamp){
   var a = new Date(UNIX_timestamp * 1000);
+//      console.log(a);
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var year = a.getFullYear();
-  var month = months[a.getMonth()];
+  //var month = months[a.getMonth()];
+  var month = a.getMonth();
   var date = a.getDate();
   var hour = a.getHours();
   var min = a.getMinutes();
   var sec = a.getSeconds();
-  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+//var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }
 
+
 // streaming reference
-var interval = setInterval(function() {
+ var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
 fetch('http://64.227.0.108:8200/api/user/latest')
@@ -24,7 +28,6 @@ fetch('http://64.227.0.108:8200/api/user/latest')
     //console.log(myJson);
 
 var data = myJson.data;
-          console.log(data);
 var xvals = [];	  
 var timestamp = [];
 var vwc = [];
@@ -65,11 +68,15 @@ pore=pore.reverse();
 batt=batt.reverse();
 rssi=rssi.reverse();
 
-//console.log(xvals);
-
+console.log(xvals);
+console.log(xvals.length);
 // reference for plotly graphing: https://plot.ly/javascript/line-and-scatter/
 // example for plotly graphing in a page: https://codepen.io/pen/?&editable=true
 // reference for styles: https://plot.ly/javascript/line-and-scatter/
+console.log(xvals[29]);
+
+xvals[29] = "2020-2-30 23:10:10";
+console.log(xvals);
 
 var temp_trace = {
   //x: xvals.reverse(),
@@ -88,7 +95,7 @@ var rssi_trace = {
  // x: timestamp,
   y: rssi,
   //mode: 'markers',
-  mode: 'lines+markers',
+  mode: 'markers',
   type: 'scatter',
   //marker: { size: 6, color: 'red'}
 };
@@ -188,6 +195,6 @@ Plotly.newPlot('myDiv_c', rssi_traces,layout_rssi);
   });
 
   if(++cnt === 100) clearInterval(interval);
-}, 300);
+ }, 300);
 
 

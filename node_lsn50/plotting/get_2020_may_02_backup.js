@@ -14,12 +14,17 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
-function getTraces(myDeviceName, myDivs) {
+// streaming reference
+//var interval = setInterval(function() {
+
+//fetch('http://localhost:8000/api/users/')
 fetch('http://64.227.0.108:8500/api/user/latest')
   .then((response) => {
     return response.json();
   })
   .then((myJson) => {
+    //console.log("hallo");
+    //console.log(myJson);
 
 var data = myJson.data;
 var xvals = [];	  
@@ -35,7 +40,7 @@ var tempOnewire = [];
 // get the data
 for (i in data) {
 	var thisDevice = data[i].deviceName;
-	if (thisDevice.localeCompare(myDeviceName)==0) {
+	if (thisDevice.localeCompare('lsn50_001')==0) {
 		//console.log('equal!');
 	//console.log(timeConverter(data[i].dateTime));
   xvals.push(timeConverter(data[i].dateTime));
@@ -162,14 +167,12 @@ var layout_rssi = {
 var temp_traces = [vegex_trace,onewire_trace];
 var rssi_traces = [rssi_trace];
 
-Plotly.newPlot(myDivs[0], temp_traces,layout_temp);
-Plotly.newPlot(myDivs[1], rssi_traces,layout_rssi);
+Plotly.newPlot('myDiv_a', temp_traces,layout_temp);
+Plotly.newPlot('myDiv_b', rssi_traces,layout_rssi);
 
-});
+  });
 
-}
-
-getTraces('lsn50_001',['myDiv_a','myDiv_b']);
-getTraces('lsn50_002',['myDiv_c','myDiv_d']);
+//  if(++cnt === 100) clearInterval(interval);
+//}, 10000);
 
 

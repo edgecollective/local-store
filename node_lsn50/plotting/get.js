@@ -149,7 +149,7 @@ var layout_rssi = {
     title: {
       text: 'RSSI',
     },
-          //range: [15,32]
+          range: [-140,0]
   },
   xaxis: {
     title: {
@@ -162,8 +162,8 @@ var layout_rssi = {
 var temp_traces = [vegex_trace,onewire_trace];
 var rssi_traces = [rssi_trace];
 
-Plotly.newPlot(myDivs[0], temp_traces,layout_temp);
-Plotly.newPlot(myDivs[1], rssi_traces,layout_rssi);
+Plotly.newPlot(myDivs[0], temp_traces,layout_temp,{staticPlot: true});
+Plotly.newPlot(myDivs[1], rssi_traces,layout_rssi,{staticPlot: true});
 
 });
 

@@ -4,7 +4,7 @@ function timeConverter(UNIX_timestamp){
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var year = a.getFullYear();
   //var month = months[a.getMonth()];
-  var month = a.getMonth();
+  var month = a.getMonth()+1;
   var date = a.getDate();
   var hour = a.getHours();
   var min = a.getMinutes();
@@ -16,9 +16,9 @@ function timeConverter(UNIX_timestamp){
 
 
 // streaming reference
- var interval = setInterval(function() {
+// var interval = setInterval(function() {
 
-//fetch('http://localhost:8000/api/users/')
+	 //fetch('http://localhost:8000/api/users/')
 fetch('http://64.227.0.108:8200/api/user/latest')
   .then((response) => {
     return response.json();
@@ -48,7 +48,7 @@ for (i in data) {
   xvals.push(timeConverter(data[i].dateTime));
   timestamp.push(data[i].dateTime);
   vwc.push(data[i].vwc);
-  temp.push(data[i].temp);
+  temp.push(data[i].temp*9/5.+32.); //convert to F
   permit.push(data[i].permit);
   bulk.push(data[i].bulk);
   pore.push(data[i].pore);
@@ -73,10 +73,7 @@ console.log(xvals.length);
 // reference for plotly graphing: https://plot.ly/javascript/line-and-scatter/
 // example for plotly graphing in a page: https://codepen.io/pen/?&editable=true
 // reference for styles: https://plot.ly/javascript/line-and-scatter/
-console.log(xvals[29]);
 
-xvals[29] = "2020-2-30 23:10:10";
-console.log(xvals);
 
 var temp_trace = {
   //x: xvals.reverse(),
@@ -86,6 +83,7 @@ var temp_trace = {
   //mode: 'markers',
   mode: 'lines+markers',
   type: 'scatter',
+	//connectgaps: true
   //marker: { size: 6, color: 'red'}
 };
 
@@ -95,7 +93,7 @@ var rssi_trace = {
  // x: timestamp,
   y: rssi,
   //mode: 'markers',
-  mode: 'markers',
+  mode: 'lines+markers',
   type: 'scatter',
   //marker: { size: 6, color: 'red'}
 };
@@ -112,6 +110,17 @@ var vwc_trace = {
   //marker: { size: 6, color: 'red'}
 };
 
+var batt_trace = {
+ //x: xvals.reverse(),
+  x: xvals,
+ // x: timestamp,
+  y: batt,
+  //mode: 'markers',
+  mode: 'lines+markers',
+  type: 'scatter',
+  //marker: { size: 6, color: 'red'}
+
+}
 
 var layout_temp = {
 /*   xaxis: {
@@ -124,17 +133,46 @@ var layout_temp = {
 */
   title:'Temperature',
   yaxis: {
+	  fixedrange:true,
     title: {
-      text: 'Temp (C)',
+      text: 'Temp (F)',
     },
-	  //range: [15,32]
+	  range: [-40,130]
   },
   xaxis: {
+	  fixedrange:true,
     title: {
       text: 'Time',
     }
   }
 };
+
+var layout_batt = {
+/*   xaxis: {
+    range: [ 15, 25 ]
+  },
+  
+  yaxis: {
+    range: [15, 25]
+  }, 
+*/
+  title:'Battery Level',
+  yaxis: {
+	  fixedrange:true,
+    title: {
+      text: 'Volts',
+    },
+          range: [0,6]
+  },
+  xaxis: {
+	  fixedrange:true,
+    title: {
+      text: 'Time',
+    }
+  }
+};
+
+
 
 var layout_rssi = {
 /*   xaxis: {
@@ -147,15 +185,17 @@ var layout_rssi = {
 */
   title:'Signal Strength',
   yaxis: {
+	  fixedrange:true,
     title: {
       text: 'RSSI',
     },
           //range: [15,32]
   },
   xaxis: {
+	  fixedrange:true,
     title: {
       text: 'Time',
-    }
+    },
   }
 };
 
@@ -171,30 +211,59 @@ var layout_vwc = {
 */
   title:'Volumetric Water Content',
   yaxis: {
+	  fixedrange:true,
     title: {
       text: 'VWC (%)',
     },
-          //range: [15,32]
+          range: [0,110]
   },
   xaxis: {
+	  fixedrange:true,
     title: {
       text: 'Time',
     }
   }
 };
 
+/*
+var batt_thresh_trace = {
+    x: [1, 2, 3, 4],
+    y: [10, 15, 13, 17],
+    type: 'scatter' 
+};
+
+var batt_thresh_layout = {
+    shapes: [
+    {
+        type: 'line',
+        xref: 'paper',
+        x0: 0,
+        y0: 3.5,
+        x1: 1,
+        y1: 3.6,
+        line:{
+            color: 'rgb(255, 0, 0)',
+            width: 4,
+            dash:'dot'
+        }
+    }
+    ]
+}
+*/
 
 var temp_traces = [temp_trace];
 var vwc_traces = [vwc_trace];
 var rssi_traces = [rssi_trace];
+var batt_traces = [batt_trace];
 
-Plotly.newPlot('myDiv_b', temp_traces,layout_temp);
-Plotly.newPlot('myDiv_a', vwc_traces,layout_vwc);
-Plotly.newPlot('myDiv_c', rssi_traces,layout_rssi);
+Plotly.newPlot('myDiv_b', temp_traces,layout_temp,{displayModeBar: false});
+Plotly.newPlot('myDiv_a', vwc_traces,layout_vwc,{displayModeBar: false});
+Plotly.newPlot('myDiv_c', rssi_traces,layout_rssi,{displayModeBar: false});
+Plotly.newPlot('myDiv_d', batt_traces, layout_batt,{displayModeBar: false});
 
   });
 
-  if(++cnt === 100) clearInterval(interval);
- }, 300);
+//  if(++cnt === 100) clearInterval(interval);
+// }, 1000);
 
 

@@ -1,4 +1,20 @@
- var express = require("express")
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+//      console.log(a);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  //var month = months[a.getMonth()];
+  var month = a.getMonth()+1;
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+//var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+
+var express = require("express")
 var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
@@ -10,8 +26,9 @@ app.use(bodyParser.raw());
 
 //'use strict';
 
+//var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
 
-var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
+var args = { filePath : "./db.sqlite", outputPath : "./mycsv" };
 
 const fs = require('fs');
 
@@ -127,6 +144,7 @@ app.post("/api/user", (req, res, next) => {
    var pressure = object.barometer[3];
 
    var ts = Math.round((new Date()).getTime() / 1000);
+   var tsh = timeConverter(ts);
 
    var alt = 2.;
    
@@ -137,8 +155,8 @@ app.post("/api/user", (req, res, next) => {
         //priv_key: req.body.private_key
     }
 
-    var sql ='INSERT INTO user (dateTime,temperature,humidity,pressure) VALUES (?,?,?,?)'
-    var params =[ts,data.temp, data.humid, data.press]
+    var sql ='INSERT INTO user (dateTime,dateHuman,temperature,humidity,pressure) VALUES (?,?,?,?,?)'
+    var params =[ts,tsh,data.temp, data.humid, data.press]
     db.run(sql, params, function (err, result) {
         if (err){
             res.status(400).json({"error": err.message})

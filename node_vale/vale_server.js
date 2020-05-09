@@ -26,9 +26,9 @@ app.use(bodyParser.raw());
 
 //'use strict';
 
-//var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
+var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
 
-var args = { filePath : "./db.sqlite", outputPath : "./mycsv" };
+//var args = { filePath : "./db.sqlite", outputPath : "./mycsv" };
 
 const fs = require('fs');
 

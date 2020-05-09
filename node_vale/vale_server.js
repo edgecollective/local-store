@@ -4,13 +4,13 @@ function timeConverter(UNIX_timestamp){
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var year = a.getFullYear();
   //var month = months[a.getMonth()];
-  var month = a.getMonth()+1;
-  var date = a.getDate();
-  var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
+  var month = ('0'+(a.getMonth()+1)).slice(-2);
+  var date = ('0'+a.getDate()).slice(-2);
+  var hour = ('0'+a.getHours()).slice(-2);
+  var min = ('0'+a.getMinutes()).slice(-2);
+  var sec = ('0'+a.getSeconds()).slice(-2);
 //var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-  var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
+  var time = year + '.' + month + '.' + date + '.' + hour + '.' + min + '.' + sec ;
   return time;
 }
 
@@ -26,9 +26,9 @@ app.use(bodyParser.raw());
 
 //'use strict';
 
-var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
+//var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
 
-//var args = { filePath : "./db.sqlite", outputPath : "./mycsv" };
+var args = { filePath : "./db.sqlite", outputPath : "./mycsv" };
 
 const fs = require('fs');
 

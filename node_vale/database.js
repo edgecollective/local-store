@@ -4,13 +4,13 @@ function timeConverter(UNIX_timestamp){
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var year = a.getFullYear();
   //var month = months[a.getMonth()];
-  var month = a.getMonth()+1;
-  var date = a.getDate();
-  var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
+  var month = ('0'+(a.getMonth()+1)).slice(-2);
+  var date = ('0'+a.getDate()).slice(-2);
+  var hour = ('0'+a.getHours()).slice(-2);
+  var min = ('0'+a.getMinutes()).slice(-2);
+  var sec = ('0'+a.getSeconds()).slice(-2);
 //var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-  var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
+  var time = year + '.' + month + '.' + date + '.' + hour + '.' + min + '.' + sec ;
   return time;
 }
 
@@ -18,8 +18,8 @@ function timeConverter(UNIX_timestamp){
 var sqlite3 = require('sqlite3').verbose()
 var md5 = require('md5')
 
-const DBSOURCE = "/media/pi/USB20FD/db.sqlite" 
-//const DBSOURCE = "./db.sqlite"
+//const DBSOURCE = "/media/pi/USB20FD/db.sqlite" 
+const DBSOURCE = "./db.sqlite"
 
 let db = new sqlite3.Database(DBSOURCE, (err) => {
     if (err) {

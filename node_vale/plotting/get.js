@@ -12,11 +12,11 @@ function timeConverter(UNIX_timestamp){
 }
 
 // streaming reference
-var interval = setInterval(function() {
+//var interval = setInterval(function() {
 
 //fetch('http://localhost:8000/api/users/')
 
-fetch('http://192.168.1.245:8200/api/user/latest')
+fetch('http://192.168.1.146:8200/api/user/latest')
   .then((response) => {
     return response.json();
   })
@@ -140,7 +140,7 @@ Plotly.newPlot('myDiv_b', humid_traces,layout_humid);
 
   });
 
-if(++cnt === 100) clearInterval(interval);
-}, 300);
+//if(++cnt === 100) clearInterval(interval);
+//}, 300);
 
 

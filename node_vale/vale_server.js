@@ -11,7 +11,7 @@ app.use(bodyParser.raw());
 //'use strict';
 
 
-var args = { filePath : "db.sqlite", outputPath : "./mycsv" };
+var args = { filePath : "/media/pi/USB20FD/db.sqlite", outputPath : "./mycsv" };
 
 const fs = require('fs');
 
@@ -78,7 +78,7 @@ app.get("/api/user/id", (req, res, next) => {
 app.get("/api/user/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
-    var sql = "select * from user order by id desc LIMIT 100"
+    var sql = "select * from user order by id desc LIMIT 500"
     var params = []
     db.all(sql, params, (err, row) => {
         if (err) {
@@ -111,12 +111,20 @@ app.post("/api/user", (req, res, next) => {
 
     console.log('Got body:', req.body);
 
-    console.log(req.body.pressure)
+    console.log(object[1]);
+    console.log(object.temperatureSensor[1]);
 
+   // console.log(req.body.pressure)
 
+/* wifi-based variables
    var temperature = req.body.temp; // temp
    var humidity = req.body.humidity; // bat voltage
    var pressure = req.body.pressure; // VWC
+*/
+
+   var temperature = object.temperatureSensor[1];
+   var humidity = object.humiditySensor[2];
+   var pressure = object.barometer[3];
 
    var ts = Math.round((new Date()).getTime() / 1000);
 

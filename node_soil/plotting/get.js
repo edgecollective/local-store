@@ -15,9 +15,6 @@ function timeConverter(UNIX_timestamp){
 }
 
 
-// streaming reference
-// var interval = setInterval(function() {
-
 	 //fetch('http://localhost:8000/api/users/')
 fetch('http://64.227.0.108:8200/api/user/latest')
   .then((response) => {
@@ -68,11 +65,29 @@ pore=pore.reverse();
 batt=batt.reverse();
 rssi=rssi.reverse();
 
-console.log(xvals);
-console.log(xvals.length);
+//console.log(xvals);
+//console.log(xvals.length);
 // reference for plotly graphing: https://plot.ly/javascript/line-and-scatter/
 // example for plotly graphing in a page: https://codepen.io/pen/?&editable=true
 // reference for styles: https://plot.ly/javascript/line-and-scatter/
+
+//console.log(xvals);
+//console.log(temp);
+
+var temp_points = [];
+var vwc_points = [];
+var rssi_points = [];
+var batt_points = [];
+for (var i=0; i<temp.length && i<xvals.length; i++) {
+
+ temp_points[i]= {t:xvals[i],y:temp[i]};
+ vwc_points[i]= {t:xvals[i],y:vwc[i]}; 
+ rssi_points[i]= {t:xvals[i],y:rssi[i]};
+ batt_points[i] = {t:xvals[i],y:batt[i]};
+// temp_points[i]= {t:new Date(xvals[i]),y:temp[i]};
+}
+
+console.log(temp_points);
 
 
 var temp_trace = {
@@ -256,14 +271,112 @@ var vwc_traces = [vwc_trace];
 var rssi_traces = [rssi_trace];
 var batt_traces = [batt_trace];
 
-Plotly.newPlot('myDiv_b', temp_traces,layout_temp,{displayModeBar: false});
-Plotly.newPlot('myDiv_a', vwc_traces,layout_vwc,{displayModeBar: false});
+//Plotly.newPlot('myDiv_b', temp_traces,layout_temp,{displayModeBar: false});
+/*Plotly.newPlot('myDiv_a', vwc_traces,layout_vwc,{displayModeBar: false});
 Plotly.newPlot('myDiv_c', rssi_traces,layout_rssi,{displayModeBar: false});
 Plotly.newPlot('myDiv_d', batt_traces, layout_batt,{displayModeBar: false});
+*/
+
+
+var ctx_temp = document.getElementById('tempChart').getContext('2d');
+var tempChart = new Chart(ctx_temp, {
+  type: 'line',
+  data: {
+    labels: xvals,
+    datasets: [{
+	    borderColor: "#bae755",
+   borderDash: [5, 5],
+            pointRadius: 1,
+   backgroundColor: "#e755ba",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+      label: 'Temp (F)',
+      data: temp_points,
+      borderWidth: 1
+    }]
+  },
+  options: {
+	  responsive:false,
+    scales: {
+      xAxes: [{
+        type: 'time',
+	time: {
+		unit: 'day'
+	}
+      }]
+    }
+  }
+});
+
+
+var ctx_vwc = document.getElementById('vwcChart').getContext('2d');
+var vwcChart = new Chart(ctx_vwc, {
+  type: 'line',
+  data: {
+    labels: xvals,
+    datasets: [{
+	    borderColor: "#bae755",
+   borderDash: [5, 5],
+	    pointRadius: 1,
+   backgroundColor: "#e755ba",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+      label: 'VWC (%)',
+      data: vwc_points,
+      borderWidth: 1
+    }]
+  },
+  options: {
+          responsive:false,
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+                unit: 'day'
+        }
+      }]
+    }
+  }
+});
+
+var ctx_batt = document.getElementById('battChart').getContext('2d');
+var battChart = new Chart(ctx_batt, {
+  type: 'line',
+  data: {
+    labels: xvals,
+    datasets: [{
+            borderColor: "#bae755",
+   borderDash: [5, 5],
+            pointRadius: 1,
+   backgroundColor: "#e755ba",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+      label: 'Battery (V)',
+      data: batt_points,
+      borderWidth: 1
+    }]
+  },
+  options: {
+          responsive:false,
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+                unit: 'day'
+        }
+      }]
+    }
+  }
+});
+
 
   });
 
-//  if(++cnt === 100) clearInterval(interval);
-// }, 1000);
 
 

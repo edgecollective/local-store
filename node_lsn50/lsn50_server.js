@@ -3,9 +3,27 @@ var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
 const sqliteToCsv = require("sqlite-to-csv");
+const stringify = require('csv-stringify');
+//var posts = require('./posts.json');
 
 'use strict';
 
+
+function downloadCsv(posts, req, res) {
+    // adding appropriate headers, so browsers can start downloading
+    // file as soon as this request starts to get served
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=\"' + 'download-' + Date.now() + '.csv\"');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Pragma', 'no-cache');
+  
+    // ta-da! this is cool, right?
+    // stringify return a readable stream, that can be directly piped
+    // to a writeable stream which is "res" (the response object from express.js)
+    // since res is an abstraction over node http's response object which supports "streams"
+    stringify(posts, { header: true })
+      .pipe(res);
+  };
 
 var args = { filePath : "db.sqlite", outputPath : "./mycsv" };
 
@@ -90,14 +108,42 @@ app.get("/api/user/latest", (req, res, next) => {
       });
 }); 
 
+function downloadCsv(req, res) {
+    stringify(posts, { header: true })
+      .pipe(res);
+  };
+  
+  
+  app.get("/api/user/csv", (req, res, next) => {
+      console.log('csv');
+  
+       var N = 1000;
+      if (req.query.limit) {
+              N = parseInt(req.query.limit);
+      }
+  
+      //var sql = "headers on mode csv output data.csv select * from user order by timestamp desc LIMIT 10"
+      //sqliteToCsv.toCSV(args,
+       //    (err) => {console.log(err); });
+      
+  //var sql = "select * from user order by timestamp desc LIMIT 10"
+      //var sql = "select * from user order by id desc LIMIT 1000"
+      var sql = "select * from user order by id desc LIMIT "
+      var sql = sql.concat(N.toString());
+      var params = [];
+      var fields = ['dateTime','temperature'];
+      var fieldNames = ['Time','Latitude'];
+      db.all(sql, params, (err, rows) => {
+          if (err) {
+            res.status(400).json({"error":err.message});
+            return;
+          }
+      //console.log(JSON.stringify(rows));
+          posts=rows;
+          downloadCsv(JSON.stringify(rows),res,req); 	
+          });
+  }); 
 
-app.get("/api/user/csv", (req, res, next) => {
-    console.log('csv')
-    //var sql = "headers on mode csv output data.csv select * from user order by timestamp desc LIMIT 10"
-    sqliteToCsv.toCSV(args,
-         (err) => {console.log(err); });
-
-}); 
 
 
 

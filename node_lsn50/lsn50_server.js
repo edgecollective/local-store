@@ -91,7 +91,7 @@ app.get("/api/user/id", (req, res, next) => {
 
 
 
-app.get("/api/user/latest", (req, res, next) => {
+app.get("/api/latest", (req, res, next) => {
     console.log('all')
     //var sql = "select * from user order by timestamp desc LIMIT 10"
     var sql = "select * from user order by id desc LIMIT 2000"
@@ -114,10 +114,10 @@ function downloadCsv(req, res) {
   };
   
   
-  app.get("/api/user/csv", (req, res, next) => {
+  app.get("/api/csv", (req, res, next) => {
       console.log('csv');
   
-       var N = 1000;
+       var N = 5000;
       if (req.query.limit) {
               N = parseInt(req.query.limit);
       }

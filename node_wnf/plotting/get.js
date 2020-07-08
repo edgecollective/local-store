@@ -193,8 +193,40 @@ var tp1Chart = new Chart(ctx_tp1, {
    pointBorderColor: "#55bae7",
    pointHoverBackgroundColor: "#55bae7",
    pointHoverBorderColor: "#55bae7",
-      label: 'Temp (C)',
+      label: 'Temp Probe 1 (C)',
       data: tp1_points,
+      borderWidth: 1
+    }]
+  },
+  options: {
+	  responsive:false,
+    scales: {
+      xAxes: [{
+        type: 'time',
+	/*time: {
+		unit: 'hour'
+	}*/
+      }]
+    }
+  }
+});
+
+var ctx_tp2 = document.getElementById('tp2Chart').getContext('2d');
+var tp2Chart = new Chart(ctx_tp2 {
+  type: 'line',
+  data: {
+    labels: xvals,
+    datasets: [{
+	    borderColor: "#bae755",
+   borderDash: [5, 5],
+            pointRadius: 1,
+   backgroundColor: "#e755ba",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+      label: 'Temp Probe 2 (C)',
+      data: tp2_points,
       borderWidth: 1
     }]
   },

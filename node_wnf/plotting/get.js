@@ -121,15 +121,15 @@ var tempChart = new Chart(ctx_temp, {
   data: {
     labels: xvals,
     datasets: [{
-	    borderColor: "#bae755",
-   borderDash: [5, 5],
+	    borderColor: "blue",
+   //borderDash: [5, 5],
             pointRadius: 1,
-   backgroundColor: "#e755ba",
+   backgroundColor: "lightblue",
    //pointBackgroundColor: "#55bae7",
    pointBackgroundColor: "blue",
-   pointBorderColor: "#55bae7",
-   pointHoverBackgroundColor: "#55bae7",
-   pointHoverBorderColor: "#55bae7",
+   pointBorderColor: "blue",
+   pointHoverBackgroundColor: "blue",
+   pointHoverBorderColor: "blue",
       label: 'Temp (C)',
       data: ta_points,
       borderWidth: 1

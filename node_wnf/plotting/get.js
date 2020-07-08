@@ -147,6 +147,39 @@ var tempChart = new Chart(ctx_temp, {
   }
 });
 
+var ctx_ha = document.getElementById('humidChart').getContext('2d');
+var tempChart = new Chart(ctx_ha, {
+  type: 'line',
+  data: {
+    labels: xvals,
+    datasets: [{
+	    borderColor: "#bae755",
+   borderDash: [5, 5],
+            pointRadius: 1,
+   backgroundColor: "#e755ba",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+      label: 'Temp (C)',
+      data: ha_points,
+      borderWidth: 1
+    }]
+  },
+  options: {
+	  responsive:false,
+    scales: {
+      xAxes: [{
+        type: 'time',
+	/*time: {
+		unit: 'hour'
+	}*/
+      }]
+    }
+  }
+});
+
+
 var ctx_rssi = document.getElementById('rssiChart').getContext('2d');
 var rssiChart = new Chart(ctx_rssi, {
   type: 'line',
@@ -195,7 +228,7 @@ var humidChart = new Chart(ctx_humid, {
    pointHoverBackgroundColor: "#55bae7",
    pointHoverBorderColor: "#55bae7",
       label: 'Humidity (%)',
-      data: humid_points,
+      data: ha_points,
       borderWidth: 1
     }]
   },
